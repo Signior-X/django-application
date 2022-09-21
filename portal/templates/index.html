@@ -1,12 +1,62 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
-</head>
-<body>
-    Hello Priyam
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block css %}
+{% endblock %}
+
+{% block body %}
+<div id="jobs">
+</div>
+
+<script>
+
+  const jobsEle = document.getElementById('jobs');
+
+  let jobsEleString = "";
+  fetch('/api/jobs').then(res => res.json())
+    .then(data => {
+      for (let job of data) {
+
+        jobsEleString += `<div class="flex font-sans relative shadow-xl flex leading-none bg-white mt-4">
+            <form class="flex-auto p-6">
+              <div class="flex flex-wrap">
+                <h1 class="flex-auto text-lg font-semibold text-slate-900">
+                  ${job.role}
+                </h1>
+                <div class="text-lg font-semibold text-slate-500">
+                  ${(job.stipend != null) ? job.stipend : ""}
+                </div>
+                <div class="w-full flex-none text-sm font-medium text-slate-700 mt-2">
+                  ${job.company} - <span class="text-slate-600"> ${(job.employment_type)} </span>
+                </div>
+              </div>
+              <div class="flex items-baseline mt-4 mb-6 border-b border-slate-200">
+              </div>
+              <div class="flex space-x-4 mb-6 text-sm font-medium">
+                <div class="flex-auto flex space-x-4">
+                  <a href="/job/${job.id}" class="pt-2 h-10 px-6 font-semibold rounded-md bg-black text-white" type="submit">
+                    Apply
+                  </a>
+                </div>
+                <button
+                  class="flex-none flex items-center justify-center w-9 h-9 rounded-md text-slate-300 border border-slate-200"
+                  type="button" aria-label="Like">
+                  <svg width="20" height="20" fill="currentColor" aria-hidden="true">
+                    <path fill-rule="evenodd" clip-rule="evenodd"
+                      d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" />
+                  </svg>
+                </button>
+              </div>
+              <p class="text-sm text-slate-700">
+                ${job.desc}
+              </p>
+            </form>
+          </div>
+        `;
+        }
+  
+      jobsEle.innerHTML = jobsEleString;
+    });
+
+</script>
+
+{% endblock %}

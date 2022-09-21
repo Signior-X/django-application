@@ -32,13 +32,13 @@ class Job(models.Model):
         default=uuid.uuid4,
         editable=False)
 
-    company = models.CharField(max_length=64, default='')
+    company = models.CharField(max_length=64, default='', name="company")
 
     # role can be like Full-stack developer, frontend developer
-    role = models.CharField(max_length=64)
+    role = models.CharField(max_length=64, name="role")
 
     # The md formated description for the role
-    desc = models.TextField()
+    desc = models.TextField(name="desc")
 
     employment_type = models.CharField(
         max_length=2,
@@ -46,6 +46,9 @@ class Job(models.Model):
         default=EmploymentType.FULL_TIME)
 
     remote = models.BooleanField(default=False)
+
+    # For storing compensation
+    stipend = models.IntegerField(blank=True, null=True)
 
 
 class Application(models.Model):
@@ -57,6 +60,9 @@ class Application(models.Model):
     applicant_id = models.ForeignKey(Applicant, on_delete=models.CASCADE)
     job_id = models.ForeignKey(Job, on_delete=models.CASCADE)
     created = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        ordering = ['created']
 
 
 # class Address(models.Model):
