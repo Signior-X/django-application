@@ -39,3 +39,6 @@ python manage.py makemigrations portal
 python manage.py createsuperuser
 ```
 
+- priyam
+- 1234
+
