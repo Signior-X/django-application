@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 
 from portal.views import applicant
 from portal.views import recruiter
