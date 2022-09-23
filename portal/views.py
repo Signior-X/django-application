@@ -32,16 +32,28 @@ def get_all_applicants(request):
 
 class RecruiterAPI(ListAPIView):
     """
-    Frontend Page for the recruiter and applicant,
-    to review the applications of the candidates
+    BONUS 2 - Pagination and filtering all done here
+    For Recruiter to review the applications of the candidates
     """
 
     queryset = Applicant.objects.all()
     serializer_class = RecruiterSerializer
     pagination_class = LimitOffsetPagination
 
-    # No need to define get, it will automatically handle the pagination
-    # We are using limit set pagination
+    def get(self, request, *args, **kwargs):
+        """ No need to define get, it will automatically handle the pagination
+        We are using limit set pagination """
+
+        return super().get(request, *args, **kwargs)
+
+    def get_queryset(self):
+        """ Filtering the query set based on the degree we get from parameters """
+        
+        queryset = Applicant.objects.all()
+        degree = self.request.query_params.get('degree')
+        if degree is not None:
+            queryset = queryset.filter(degree=degree)
+        return queryset
 
 
 
@@ -50,7 +62,7 @@ class ApplicantAPI(CreateAPIView):
 
     post - Create the applicants data using post api (Part 2)
     get - Read an applicants data using "email"
-    put - Update the applicants data using "email"
+    put - Update the applicants data using "email" (Part 3 and Accepted - Rejected)
     delete - Delete an application
     """
 
