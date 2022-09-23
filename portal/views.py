@@ -1,30 +1,58 @@
 from django.http import HttpResponse, JsonResponse, Http404
 from django.shortcuts import render
 from rest_framework.decorators import api_view
-from rest_framework.generics import CreateAPIView
+from rest_framework.generics import GenericAPIView, CreateAPIView, ListAPIView
+from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework import status
 
 from portal.models import Applicant
-from portal.serializers import ApplicantSerializer, RecruiterSerializer
+from portal.serializers import ApplicantSerializer, RecruiterSerializer, ApplicantStatusUpdateSerializer
 
 
-class RecruiterAPI(CreateAPIView):
-    '''
-    APIS and pages for the recruiter, that means us who are going
+@api_view(['GET', 'POST'])
+def get_all_applicants(request):
+    """
+    Part 1 -> List all the applicants
+
+    Returns
+    --------
+    GET - Renders the page of our single page app
+    POST - The JSONResponse object having all available applicants currently
+    """
+
+    if request.method == 'GET':
+        return render(request, template_name='index.html')
+    else:
+        jobs = Applicant.objects.all()
+        serializer = RecruiterSerializer(jobs, many=True)
+        return JsonResponse(serializer.data, safe=False)
+
+
+class RecruiterAPI(ListAPIView):
+    """
+    Frontend Page for the recruiter and applicant,
     to review the applications of the candidates
-    '''
+    """
 
-    serializer_class = ApplicantSerializer
+    queryset = Applicant.objects.all()
+    serializer_class = RecruiterSerializer
+    pagination_class = LimitOffsetPagination
 
-    def get(self, request, *args, **kwargs):
-        return render('index.html')
+    # No need to define get, it will automatically handle the pagination
+    # We are using limit set pagination
 
-class ApplicantCreateAPI(CreateAPIView):
-    '''
-    Class to Manage jobs
-    get - View a particular job
-    post - Add a new job
-    '''
+
+
+class ApplicantAPI(CreateAPIView):
+    """ CRUD to manage applications by applicants
+
+    post - Create the applicants data using post api (Part 2)
+    get - Read an applicants data using "email"
+    put - Update the applicants data using "email"
+    delete - Delete an application
+    """
 
     serializer_class = ApplicantSerializer
 
@@ -35,11 +63,15 @@ class ApplicantCreateAPI(CreateAPIView):
             raise Http404
 
     def get(self, request, email, *args, **kwargs):
+        """ Reads an applicants data from email """
+
         applicant = self.get_object(email)
         serializer = ApplicantSerializer(applicant)
         return Response(serializer.data)
 
     def post(self, request, *args, **kwargs):
+        """ Create an application from data came in parameters """
+
         serializer = self.serializer_class(data=request.data)
 
         if not serializer.is_valid():
@@ -47,13 +79,23 @@ class ApplicantCreateAPI(CreateAPIView):
 
         return self.create(request, *args, **kwargs)
 
-@api_view(['GET', 'POST'])
-def get_all_applicants(request):
-    ''' Returns the list of all available jobs currently '''
+    def put(self, request, email, *args, **kwargs):
+        """ Upadate an applicant's data from email """
 
-    if request.method == 'GET':
-        return render(request, template_name='index.html')
-    else:
-        jobs = Applicant.objects.all()
-        serializer = RecruiterSerializer(jobs, many=True)
-        return JsonResponse(serializer.data, safe=False)
+        applicant = self.get_object(email)
+        serializer = ApplicantStatusUpdateSerializer(applicant, data=request.data)
+
+        if serializer.is_valid():
+            print("valid")
+            serializer.save()
+            return Response(serializer.data)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, email, format=None):
+        """ Deletes the application associated with email """
+
+        applicant = self.get_object(email)
+        applicant.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+

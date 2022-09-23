@@ -37,14 +37,14 @@
   const jobsEle = document.getElementById('jobs');
 
   let jobsEleString = "";
-  postData('/')
+  fetch('/api/recruiter').then(res => res.json())
   .then(data => {
       // console.log("DATA :" + data);
 
       for (let application of data) {
         console.log("Application: " + application);
 
-        jobsEleString += `<div class="flex font-sans relative shadow-xl flex leading-none bg-white mt-4">
+        jobsEleString += `<div id="app-block-${application.email}" class="flex font-sans relative shadow-xl flex leading-none bg-white mt-4">
             <div class="flex-auto p-6">
               <div class="flex flex-wrap">
                 <h1 class="flex-auto text-lg font-semibold text-slate-900">
@@ -62,8 +62,17 @@
               <div class="flex space-x-4 mb-6 text-sm font-medium">
                 <div class="flex-auto flex space-x-4">
                   <button onclick=showApplicationDetails("${application.email}") class="h-10 px-6 font-semibold rounded-md bg-black text-white">
-                    View
+                    View Profile
                   </button>
+                  <div class="h-10 py-2 font-semibold accepted-true"> ${application.status} </div>
+                  <div class="accepted-false" ${(application.status == "Accepted" || application.status == "Rejected") ? 'style="display: none"' : ''}>
+                    <button onclick="changeApplicationStatus('${application.email}', 'Accepted')" class="h-10 px-6 font-semibold rounded-md bg-green-700 text-white">
+                      Accept
+                    </button>
+                    <button onclick="changeApplicationStatus('${application.email}', 'Rejected')" class="h-10 px-6 font-semibold rounded-md bg-red-700 text-white">
+                      Reject
+                    </button>
+                  </div>
                 </div>
                 <button
                   class="flex-none flex items-center justify-center w-9 h-9 rounded-md text-slate-300 border border-slate-200"
@@ -96,10 +105,27 @@
         modal.toggle();
       }
 
-      fetch('/applicant/' + email).then(res => res.json())
+      fetch('/api/applicant/' + email).then(res => res.json())
       .then(data => {
         document.getElementById('app-detail-1').innerHTML = JSON.stringify(data, null, "\t");
       })
+    }
+
+    function changeApplicationStatus(email, status) {
+      console.log("Email: ", email, " \n Status: ", status);
+
+      postData(`/api/applicant/${email}/`, { email, status }, 'PUT')
+        .then(data => {
+          console.log("Data got: ", data);
+
+          if (data.status == "Accepted" || data.status == "Rejected") {
+            const emailBlock = document.getElementById('app-block-' + email);
+            emailBlock.getElementsByClassName('accepted-true')[0].innerHTML = data.status;
+            emailBlock.getElementsByClassName('accepted-false')[0].style.display = "none";
+          } else {
+            console.log("Data Error: ", data);
+          }
+        });
     }
 
 </script>

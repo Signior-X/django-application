@@ -21,10 +21,10 @@
   const csrfToken = "{{ csrf_token }}";
 
   // Example POST method implementation:
-  async function postData(url = '', data = {}) {
+  async function postData(url = '', data = {}, method = 'POST') {
     // Default options are marked with *
     const response = await fetch(url, {
-      method: 'POST', // *GET, POST, PUT, DELETE, etc.
+      method: method, // *GET, POST, PUT, DELETE, etc.
       mode: 'cors', // no-cors, *cors, same-origin
       cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
       credentials: 'same-origin', // include, *same-origin, omit
@@ -177,7 +177,8 @@
           <h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white"> Track Job Applications </h3>
           <form class="space-y-6" action="#">
             <div>
-              <label for="text" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"> Application Email </label>
+              <label for="text" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"> Application
+                Email </label>
               <input type="email" name="application_email" id="application_email"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                 placeholder="Application Email" required>
@@ -227,7 +228,7 @@
 
             <div>
               <label for="a_age" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"> Enter Age
-                </label>
+              </label>
               <textarea type="text" name="a_age" id="a_age"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                 placeholder="Your age" required></textarea>
@@ -249,7 +250,8 @@
             </select>
 
             <div>
-              <label for="a_contact" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"> Contact Number
+              <label for="a_contact" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"> Contact
+                Number
               </label>
               <input type="text" name="a_contact" id="a_contact"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
@@ -265,7 +267,8 @@
             </select>
 
             <div>
-              <label for="a_study" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"> Field of Study
+              <label for="a_study" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"> Field of
+                Study
               </label>
               <input type="text" name="a_study" id="a_study"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
@@ -284,7 +287,7 @@
   <script src="https://unpkg.com/flowbite@1.5.3/dist/flowbite.js"></script>
 
   <script>
-
+    let GMODAL = "";
     function openNewJobModal() {
       const targetEl = document.getElementById('newJobModal');
 
@@ -294,6 +297,7 @@
       document.getElementById('close-new-job-modal').onclick = function () {
         modal.toggle();
       }
+      GMODAL = modal;
     }
 
     document.getElementById('open-recruit-modal').onclick = function () {
@@ -310,6 +314,8 @@
       document.getElementById('close-job-modal').onclick = function () {
         modal.toggle();
       }
+
+      GMODAL = modal;
     }
 
     document.getElementById('new-job-form').onsubmit = function (e) {
@@ -335,14 +341,14 @@
 
       console.log("sending data", data);
 
-      postData("/applicant/", data)
-      .then(data => {
-        console.log(data);
-      }).catch(err => {
-        console.log("Error came: ", err);
-      });
+      postData("/api/applicant/", data)
+        .then(data => {
+          console.log(data);
+          GMODAL.toggle();
+        }).catch(err => {
+          console.log("Error came: ", err);
+        });
     }
-
   </script>
 
   <div class="container max-w-7xl mx-auto px-4 sm:px-6 md:px-8" style="max-width: 1024px; margin-top: 96px">
