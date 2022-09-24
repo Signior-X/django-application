@@ -341,7 +341,7 @@
 
       console.log("sending data", data);
 
-      postData("/api/applicant/", data)
+      postData("/api/applicant/" + email + "/", data)
         .then(data => {
           console.log(data);
           GMODAL.toggle();
