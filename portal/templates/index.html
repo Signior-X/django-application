@@ -8,7 +8,17 @@
 <div id="nav-buttons" style="display: flex;">
   <div id="total-pages">Total Pages = 3</div>
   <button id="prev-btn" class="mx-3 h-10 px-6 font-semibold rounded-md bg-black text-white"> Previous </button>
-  <button id="next-btn" class="h-10 px-6 font-semibold rounded-md bg-black text-white"> Next </button>
+  <button id="next-btn" class="mx-3 h-10 px-6 font-semibold rounded-md bg-black text-white"> Next </button>
+
+  <div class="filters">
+    <select name="filter_status" id="filter_status"
+      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white">
+      <option value="">None</option>
+      <option value="Accepted">Accepted</option>
+      <option value="Rejected">Rejected</option>
+      <option value="Incomplete">Incomplete</option>
+    </select>
+  </div>
 </div>
 
 <div id="jobs">
@@ -52,11 +62,15 @@
   const jobsEle = document.getElementById('jobs');
   let prev = "";
   let next = "";
+  let appendParams = "";
 
-  function getApplicants(url=`/api/recruiter/?limit=${3}&offset=${0}`) {
+  function getApplicants(url = `/api/recruiter/?limit=${3}&offset=${0}`, params="") {
+    // console.log("URL: ", url, params);
+    const new_url = `${url}&${params}`;
+    console.log("URL: ", new_url);
 
     let jobsEleString = "";
-    fetch(url).then(res => res.json())
+    fetch(new_url).then(res => res.json())
       .then(data => {
         console.log("DATA :" + JSON.stringify(data));
 
@@ -120,11 +134,11 @@
 
   getApplicants();
 
-  document.getElementById('prev-btn').onclick = function() {
+  document.getElementById('prev-btn').onclick = function () {
     getApplicants(prev);
   }
 
-  document.getElementById('next-btn').onclick = function() {
+  document.getElementById('next-btn').onclick = function () {
     getApplicants(next);
   }
 
@@ -160,6 +174,17 @@
           console.log("Data Error: ", data);
         }
       });
+  }
+
+  const status_filter = document.getElementById('filter_status');
+  document.getElementById('filter_status').onchange = function() {
+    console.log(status_filter.value);
+
+    if (status_filter.value) {
+      getApplicants(url=`/api/recruiter/?limit=${3}&offset=${0}` ,params="status=" + status_filter.value);
+    } else {
+      getApplicants();
+    }
   }
 
 </script>

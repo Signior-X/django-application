@@ -53,6 +53,11 @@ class RecruiterAPI(ListAPIView):
         degree = self.request.query_params.get('degree')
         if degree is not None:
             queryset = queryset.filter(degree=degree)
+        
+        status = self.request.query_params.get('status')
+        if status is not None:
+            queryset = queryset.filter(status=status)
+
         return queryset
 
 
