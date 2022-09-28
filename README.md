@@ -1,8 +1,24 @@
 ### Application Portal
+The portal to check and review job applications created using Django Rest Framework. It allows applicants to create new applications, and reviewers to check the applications and change the status of application.
 
 
+### Installation and Setup
+Install Python and Django, create a new virtual environment for this particular project.
 
-### How I setup
+```
+pip install -r requirements.txt
+```
+
+Now to run the server, simply do migrate and run
+```
+python manage.py migrate
+python manage.py runserver
+```
+
+The server will run on `localhost:8000`
+
+### Features and Screenshots
+
 
 
 #### My personal steps I followed
