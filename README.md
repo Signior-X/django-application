@@ -18,7 +18,23 @@ python manage.py runserver
 The server will run on `localhost:8000`
 
 ### Features and Screenshots
+##### Create an application
+![image](https://user-images.githubusercontent.com/56730716/192770314-cebcacdf-ab37-4a68-bc54-14ed20079345.png)
 
+#### View user profile
+![image](https://user-images.githubusercontent.com/56730716/192770606-01cc5767-005c-496b-92fa-bc89606ccc0b.png)
+![image](https://user-images.githubusercontent.com/56730716/192770560-ad9354df-12a7-499b-82f5-e1a093f6de89.png)
+
+#### Update user Profile, update status of application
+![image](https://user-images.githubusercontent.com/56730716/192770754-c2183fd7-1983-4146-ad14-0d26fd3d907d.png)
+
+#### Pagination and Filtering
+![image](https://user-images.githubusercontent.com/56730716/192770934-757e8182-1187-42fd-a419-4a6ca5ed6578.png)
+![image](https://user-images.githubusercontent.com/56730716/192771321-1ed040ca-9aba-46ce-b490-62263da82e29.png)
+
+
+#### Swagger API documentation
+![image](https://user-images.githubusercontent.com/56730716/192771104-4bf9920b-6419-4faf-b42b-382386a6df05.png)
 
 
 #### My personal steps I followed
