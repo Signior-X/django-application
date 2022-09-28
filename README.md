@@ -1,10 +1,9 @@
 ### Application Portal
 The portal to check and review job applications created using Django Rest Framework. It allows applicants to create new applications, and reviewers to check the applications and change the status of application.
 
-AppPortal -> Contains the Project information and Settings.
-protal -> The app where all the code resides
-
-APIs are implemented in `views.py` currently and well documented.
+- [AppPortal](https://github.com/Signior-X/django-application/tree/main/AppPortal) -> Contains the Project information and Settings.
+- [portal](https://github.com/Signior-X/django-application/tree/main/portal) -> The app where all the code resides
+- APIs are implemented in [`views.py`](https://github.com/Signior-X/django-application/blob/main/portal/views.py) currently and well documented.
 
 ### Installation and Setup
 Install Python and Django, create a new virtual environment for this particular project.
