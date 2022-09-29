@@ -3,6 +3,7 @@ from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework.generics import GenericAPIView, CreateAPIView, ListAPIView
 from rest_framework.pagination import LimitOffsetPagination
+from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
@@ -72,6 +73,7 @@ class ApplicantAPI(CreateAPIView):
     """
 
     serializer_class = ApplicantSerializer
+    parser_classes = (MultiPartParser, FormParser)
 
     def get_object(self, email):
         try:

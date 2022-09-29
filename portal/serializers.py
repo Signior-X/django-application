@@ -8,9 +8,11 @@ class ApplicantSerializer(serializers.ModelSerializer):
         fields = ("__all__")
 
 class ApplicantStatusUpdateSerializer(serializers.ModelSerializer):
+    resume = serializers.ImageField(required=False)
+
     class Meta:
         model = Applicant
-        fields = ['email', 'status']
+        fields = ['email', 'status', 'resume']
 
 class RecruiterSerializer(serializers.ModelSerializer):
     class Meta:

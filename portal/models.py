@@ -1,7 +1,18 @@
+import string
+import random
+
 from django.utils import timezone
 from django.contrib.auth.models import User
 from django.db import models
 
+def randStr(chars = string.ascii_uppercase, N=10):
+	return ''.join(random.choice(chars) for _ in range(N))
+
+def upload_to(instance, filename):
+    """ lets us explicitly set upload path and filename
+        for resume upload """
+
+    return 'images/{filename}'.format(filename=randStr() + filename)
 
 class Applicant(models.Model):
     '''
@@ -58,3 +69,8 @@ class Applicant(models.Model):
         default=ApplicantStatus.INCOMPLETE
     )
 
+    resume = models.ImageField(
+        upload_to=upload_to,
+        blank=True,
+        null=True
+    )
